@@ -1,3 +1,19 @@
+# Beyond 3DMM Space: Towards Fine-grained 3D Face Reconstruction
+
+<p align="center">
+  <img src="images/fig-briefview.png" alt="demo" width="800px">
+</p>
+
+
+**\[Updates\]**
+ - The code and model of FGNet is released.
+ - The dataset of FG3D is released.
+
+## Introduction
+This repo releases the code and data in the paper published in ECCV 2020: Beyond 3DMM Space: Towards Fine-grained 3D Face Reconstruction (http://www.cbsr.ia.ac.cn/users/xiangyuzhu/papers/2020beyond.pdf). 
+
+The reconstruction results of widely used 3DMM lose the fine-grained geometry and look different from real faces. We propose a Fine-Grained reconstruction Network (FGNet) that can concentrate on shape modification and generate reconstruction results with fine-grained geometry. 
+
 ## Getting started
 ### Requirements
  - PyTorch >= 0.4.1 (**PyTorch v1.1.0** is tested successfully on macOS and Linux.)
@@ -21,11 +37,13 @@ In addition, I strongly recommend using Python3.6+ instead of older version for 
 ### Usage
 
 1. Clone this repo (this may take some time as it is a little big)
-    ```
-    ...
 
-    ```
-2. Build cython module (just one line for building)
+2. Download the following large models to models/
+
+   https://github.com/XiangyuZhu-open/models/blob/fdb595cc1061fefe077d2f168924430adedbfe70/_checkpoint_epoch_22.pth.tar
+   https://github.com/XiangyuZhu-open/models/blob/fdb595cc1061fefe077d2f168924430adedbfe70/shape_predictor_68_face_landmarks.dat
+
+3. Build cython module (just one line for building)
    ```
    cd MM3D/cython
    python3 setup.py build_ext -i
@@ -33,7 +51,7 @@ In addition, I strongly recommend using Python3.6+ instead of older version for 
    This is for accelerating depth estimation and PNCC render since Python is too slow in for loop.
    
     
-3. Run the `main.py` with arbitrary image as input
+4. Run the `main.py` with arbitrary image as input
     ```
     python3 main.py -f examples/images/test.jpg
     ```
@@ -47,7 +65,13 @@ In addition, I strongly recommend using Python3.6+ instead of older version for 
 	begin testing
 	end
     ```
-### Result of test
 
 
+## Fine-grained 3D Face (FG3D) Data
+<p align="center">
+  <img src="images/fig-fg3d.png" alt="FG3D" width="550px">
+</p>
 
+FG3D are constructed from FRGC, BP4D and CASIA-3D. We register and out-of-plane augment the three datasets, generating a large 3D dataset with 213,367 samples. Among FG3D, 90% subjects are used as the training set and the rest 10\% subjects are the testing set. 
+
+[[BaiduYun]](https://pan.baidu.com/s/1ruqOXBljZowUxGSLg9HMiQ) (Extract Code: 4r84). [[GoogleDrive]](https://drive.google.com/drive/folders/1zmyekrHABO-eykloxM1z0TRiXTm7oM3r?usp=sharing)

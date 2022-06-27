@@ -30,6 +30,25 @@ gpu = 0
 if gpu:
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
+#  Save PLY file, given 3D shape (Vx3), and triangle connectivity (Fx3)
+def write_plyShapeFloat(outname, mat_Depth, mat_Faces):
+  with open(outname, 'w') as f:
+    f.write("ply\n")
+    f.write("format ascii 1.0\n")
+    f.write(f"element vertex {mat_Depth.shape[1]}\n")
+    f.write("property float x\n")
+    f.write("property float y\n")
+    f.write("property float z\n")
+    f.write(f"element face {mat_Faces.shape[1]}\n")
+    f.write("property list uchar int vertex_indices\n")
+    f.write("end_header\n")
+    
+    for i in range(mat_Depth.shape[1]):
+      f.write(f"{mat_Depth[0, i]} {mat_Depth[1, i]} {mat_Depth[2, i]}\n")
+    
+    for i in range(mat_Faces.shape[1]):
+      f.write(f"3 {mat_Faces[0, i]-1} {mat_Faces[1, i]-1} {mat_Faces[2, i]-1}\n")
+
 def main(args):
     # 1. load pre-tained model
     checkpoint_fp = 'models/phase1_wpdc_vdc.pth.tar'
@@ -201,7 +220,12 @@ def main(args):
             shapediff = uvmodule.uvmap2vertex(output, uv_coords).T
             shape_3ddfa = (u + w_shp @ alpha_shp + w_exp @ alpha_exp).reshape(3, -1, order='F')
             shape_dt = shape_3ddfa + shapediff
+            print(shape_dt)
+            print(shape_dt.shape)
+            print(tri)
+            print(tri.shape)
             sio.savemat(des_path + filename + '.mat', {'shape_dt': shape_dt})
+            write_plyShapeFloat(des_path + filename + '.ply', shape_dt, tri)
             ind += 1
 
     print('The result of ' + filename + ' are in examples/results')
